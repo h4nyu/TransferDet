@@ -1,0 +1,30 @@
+version: '2.4'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - http_proxy
+        - https_proxy
+
+    shm_size: '30gb'
+    volumes:
+      - .:/srv
+      - ./store:/kaggle
+      - ./store:/store
+    runtime: nvidia
+    environment:
+      - KAGGLE_USERNAME
+      - KAGGLE_KEY
+      - KAGGLE_PROXY
+      - http_proxy
+      - https_proxy
+
+  web:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./:/public
+    ports:
+      - "$WEB_PORT:80"
