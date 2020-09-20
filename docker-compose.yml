@@ -14,12 +14,16 @@ services:
       - ./store:/kaggle
       - ./store:/store
     runtime: nvidia
+    command: jupyter notebook --ip=0.0.0.0 --allow-root --port=$NOTEBOOK_PORT --notebook-dir=/srv
     environment:
       - KAGGLE_USERNAME
       - KAGGLE_KEY
       - KAGGLE_PROXY
       - http_proxy
       - https_proxy
+      - NOTEBOOK_PORT
+    ports:
+      - "$NOTEBOOK_PORT:$NOTEBOOK_PORT"
 
   web:
     image: nginx:latest
